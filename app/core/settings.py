@@ -3,22 +3,27 @@ import logging
 import sys
 
 class Settings(BaseSettings):
-    database_url: str
-    secret_key: str
-    debug: bool = False
-    log_level: str = "INFO"  # 可用 ENV 調整
+    # 這裡的變數名稱要對應 .env 裡的內容 (不分大小寫，但大寫比較標準)
+    DATABASE_URL: str
+    SECRET_KEY: str
+    ALGORITHM: str = "HS256" # 建議加上預設值
+    DEBUG: bool = False
+    LOG_LEVEL: str = "INFO"
 
     class Config:
         env_file = ".env"
+        # 如果你的變數在 .env 是大寫，Pydantic 會自動對應
+        case_sensitive = False 
+
 
 settings = Settings()
 
-# 設定全局 logging
+
 logging.basicConfig(
-    level=getattr(logging, settings.log_level.upper(), logging.INFO),
+    level=getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO), # <-- 改成大寫
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     handlers=[logging.StreamHandler(sys.stdout)]
 )
 
-logger = logging.getLogger("fin-iq-api")
-logger.info("Logging is configured. Level: %s", settings.log_level)
+logger = logging.getLogger("koko-ai-api")
+logger.info("Logging is configured. Level: %s", settings.LOG_LEVEL) # <-- 改成大寫

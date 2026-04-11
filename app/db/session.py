@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.core.settings import settings
 
-engine = create_engine(settings.database_url, future=True, echo=True)
+engine = create_engine(settings.DATABASE_URL, future=True, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Dependency (給 FastAPI 用)

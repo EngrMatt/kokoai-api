@@ -15,7 +15,7 @@ target_metadata = Base.metadata
 
 # 匯入你的設定
 from app.core.settings import settings
-config.set_main_option("sqlalchemy.url", settings.database_url)  # 注意小寫
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)  # 注意小寫
 # 動態設定 DB URL
 
 
