@@ -16,12 +16,13 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     pending = db.query(User).filter(User.email == user.email, User.is_active == False).first()
     if pending:
         pending.hashed_password = hash_password(user.password)
+        pending.is_active = True
         db.add(pending)
         db.commit()
         db.refresh(pending)
         new_user = pending
     else:
-        new_user = User(email=user.email, hashed_password=hash_password(user.password), is_active=False)
+        new_user = User(email=user.email, hashed_password=hash_password(user.password), full_name=user.full_name, is_active=True)
         db.add(new_user)
         db.commit()
         db.refresh(new_user)

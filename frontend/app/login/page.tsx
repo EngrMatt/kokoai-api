@@ -24,11 +24,39 @@ export default function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate loading
-    await new Promise(resolve => setTimeout(resolve, 800))
+    try {
+      const endpoint = isLogin ? '/auth/login' : '/auth/register'
+      const payload = isLogin
+        ? { email, password }
+        : { email, password, full_name: name }
 
-    // Mock login - just redirect to dashboard
-    router.push('/')
+      const response = await fetch(`http://localhost:8077${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.detail || '操作失敗')
+      }
+
+      const data = await response.json()
+
+      if (isLogin) {
+        // 儲存 
+        localStorage.setItem('token', data.access_token)
+        router.push('/')
+      } else {
+        // 註冊成功後自動切換到登入
+        setIsLogin(true)
+        alert('註冊成功，請登入')
+      }
+    } catch (err: any) {
+      alert(err.message)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleGoogleLogin = async () => {

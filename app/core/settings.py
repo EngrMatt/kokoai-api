@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256" # 建議加上預設值
     DEBUG: bool = False
     LOG_LEVEL: str = "INFO"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 # Token 有效期 (分鐘)
 
     class Config:
         env_file = ".env"
