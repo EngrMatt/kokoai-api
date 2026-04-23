@@ -12,8 +12,8 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Set environment variables for build time if needed
-# ENV NEXT_PUBLIC_API_URL=http://localhost:8077
+ARG NEXT_PUBLIC_API_URL=http://localhost:8077
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN pnpm run build
 
 FROM base AS runner

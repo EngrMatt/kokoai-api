@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Eye, EyeOff, Mail } from 'lucide-react'
+import { authApi } from '@/lib/api/auth'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -25,23 +26,13 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      const endpoint = isLogin ? '/auth/login' : '/auth/register'
       const payload = isLogin
         ? { email, password }
         : { email, password, full_name: name }
 
-      const response = await fetch(`http://localhost:8077${endpoint}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.detail || '操作失敗')
-      }
-
-      const data = await response.json()
+      const data = isLogin
+        ? await authApi.login(payload)
+        : await authApi.register(payload)
 
       if (isLogin) {
         // 儲存 
