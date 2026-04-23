@@ -23,20 +23,20 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    
+
     // Simulate loading
     await new Promise(resolve => setTimeout(resolve, 800))
-    
+
     // Mock login - just redirect to dashboard
     router.push('/')
   }
 
   const handleGoogleLogin = async () => {
     setIsLoading(true)
-    
+
     // Simulate Google login
     await new Promise(resolve => setTimeout(resolve, 800))
-    
+
     // Mock login - just redirect to dashboard
     router.push('/')
   }
@@ -51,33 +51,20 @@ export default function LoginPage() {
           <div className="absolute bottom-40 right-10 w-96 h-96 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute top-1/2 left-1/3 w-48 h-48 rounded-full bg-accent/30 blur-2xl" />
         </div>
-        
+
         {/* Content */}
         <div className="relative z-10 flex flex-col justify-center px-12 xl:px-20">
-          {/* Logo */}
-          <div className="mb-12">
-            <Image
-              src="/images/logo.png"
-              alt="Ko.AI"
-              width={140}
-              height={50}
-              className="h-12 w-auto brightness-0 invert"
-              priority
-            />
-          </div>
-          
           {/* Slogan */}
           <div className="space-y-6">
             <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight">
               智慧理財
-              <br />
               簡單生活
             </h1>
             <p className="text-lg xl:text-xl text-white/80 max-w-md leading-relaxed">
               讓 Ko.AI 成為您的智慧理財夥伴，輕鬆掌握每一筆收支，實現財務自由的第一步。
             </p>
           </div>
-          
+
           {/* Features */}
           <div className="mt-12 space-y-4">
             <div className="flex items-center gap-3 text-white/90">
@@ -106,7 +93,7 @@ export default function LoginPage() {
             </div>
           </div>
         </div>
-        
+
         {/* Bottom Copyright */}
         <div className="absolute bottom-6 left-12 xl:left-20 text-white/50 text-sm">
           © 2026 Ko.AI. All rights reserved.
@@ -115,38 +102,25 @@ export default function LoginPage() {
 
       {/* Right Side - Login Form */}
       <div className="w-full lg:w-1/2 flex flex-col bg-background">
-        {/* Mobile Logo */}
-        <div className="lg:hidden flex justify-center pt-8 pb-4">
-          <Image
-            src="/images/logo.png"
-            alt="Ko.AI"
-            width={120}
-            height={44}
-            className="h-10 w-auto"
-            priority
-          />
-        </div>
-
-        {/* Desktop Logo */}
-        <div className="hidden lg:flex justify-end p-8">
-          <Image
-            src="/images/logo.png"
-            alt="Ko.AI"
-            width={100}
-            height={36}
-            className="h-9 w-auto"
-            priority
-          />
-        </div>
 
         {/* Form Container */}
         <div className="flex-1 flex items-center justify-center px-6 sm:px-12 lg:px-16 xl:px-24">
           <div className="w-full max-w-md">
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-foreground">
+            <div className="mb-8 flex flex-col items-center">
+              <div className="mb-6">
+                <Image
+                  src="/images/kokoai_icon.png"
+                  alt="Ko.AI"
+                  width={120}
+                  height={120}
+                  className="w-52 h-22 lg:w-52 lg:h-22"
+                  priority
+                />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground text-center">
                 {isLogin ? '使用者登入' : '建立帳號'}
               </h2>
-              <p className="mt-2 text-muted-foreground">
+              <p className="mt-2 text-muted-foreground text-center">
                 {isLogin ? '歡迎回來，請登入您的帳號' : '建立帳號開始您的理財之旅'}
               </p>
             </div>
