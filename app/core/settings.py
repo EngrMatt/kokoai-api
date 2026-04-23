@@ -20,10 +20,10 @@ settings = Settings()
 
 
 logging.basicConfig(
-    level=getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO), # <-- 改成大寫
+    level=getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO), 
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     handlers=[logging.StreamHandler(sys.stdout)]
 )
 
 logger = logging.getLogger("koko-ai-api")
-logger.info("Logging is configured. Level: %s", settings.LOG_LEVEL) # <-- 改成大寫
+logger.info("Logging is configured. Level: %s", settings.LOG_LEVEL)

@@ -15,7 +15,7 @@ class UserRepository:
         db_user = User(
             full_name=user_in.full_name,
             email=user_in.email,
-            hashed_password=hashed_password,  # 存入加密後的密碼
+            hashed_password=hashed_password,
             is_active=True,
             is_superuser=False
         )

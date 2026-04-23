@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 import uuid
 from app.schemas.user_schema import UserCreate
 from app.repositories.user_repository import UserRepository
-from app.core.security import hash_password  # 確保你有這個 function
+from app.core.security import hash_password 
 from fastapi import HTTPException
 
 class UserService:
@@ -11,7 +11,7 @@ class UserService:
         self.user_repo = UserRepository()
 
     def create_user(self, db: Session, user_in: UserCreate):
-        # 1. 邏輯處理：檢查 Email 是否重複 (這很重要！)
+        # 1. 邏輯處理：檢查 Email 是否重複
         existing_user = self.user_repo.get_by_email(db, email=user_in.email)
         if existing_user:
             raise HTTPException(status_code=400, detail="Email already registered")
