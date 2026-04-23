@@ -1,5 +1,6 @@
 # app/__init__.py
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from .routers import (
     user_router, 
     auth_router
@@ -7,6 +8,15 @@ from .routers import (
 
 def create_app() -> FastAPI:
     app = FastAPI(title="FinIQ API")
+
+    # 配置 CORS
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     # 將所有 router 放到列表中
     routers = [

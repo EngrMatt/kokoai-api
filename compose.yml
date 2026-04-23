@@ -10,8 +10,17 @@ services:
     depends_on:
       - db
 
+  frontend:
+    build: ./frontend
+    container_name: kokoai-frontend
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - kokoai-api
+
   db:
-    image: postgres:18
+    image: postgres:17
     container_name: kokoai-db
     restart: unless-stopped
     environment:
