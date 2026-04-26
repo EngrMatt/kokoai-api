@@ -52,6 +52,9 @@ const COLOR_OPTIONS = [
   '#FF69B4',
 ]
 
+import { useEffect } from 'react'
+import { getCategories, createCategory, updateCategory as apiUpdateCategory, deleteCategory as apiDeleteCategory } from '@/lib/api/categories'
+
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<'categories' | 'goals' | 'general'>('categories')
   const [showAddCategory, setShowAddCategory] = useState(false)
@@ -64,51 +67,65 @@ export default function SettingsPage() {
   })
 
   const categories = useFinanceStore((state) => state.categories)
-  const addCategory = useFinanceStore((state) => state.addCategory)
-  const updateCategory = useFinanceStore((state) => state.updateCategory)
-  const deleteCategory = useFinanceStore((state) => state.deleteCategory)
+  const fetchCategories = useFinanceStore((state) => state.fetchCategories)
   const savingsGoals = useFinanceStore((state) => state.savingsGoals)
-  const updateSavingsGoal = useFinanceStore((state) => state.updateSavingsGoal)
-  const deleteSavingsGoal = useFinanceStore((state) => state.deleteSavingsGoal)
   const settings = useFinanceStore((state) => state.settings)
-  const updateSettings = useFinanceStore((state) => state.updateSettings)
   const transactions = useFinanceStore((state) => state.transactions)
   const recurringPayments = useFinanceStore((state) => state.recurringPayments)
   const creditCards = useFinanceStore((state) => state.creditCards)
 
-  const expenseCategories = categories.filter((c) => c.type === 'expense')
-  const incomeCategories = categories.filter((c) => c.type === 'income')
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      fetchCategories(token)
+    }
+  }, [fetchCategories])
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('zh-TW', {
-      style: 'currency',
-      currency: 'TWD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount)
+  const expenseCategories = categories.filter((c) => (c.type as string).toLowerCase() === 'expense')
+  const incomeCategories = categories.filter((c) => (c.type as string).toLowerCase() === 'income')
+
+  const handleSubmitCategory = async () => {
+    if (!categoryForm.name) return
+    const token = localStorage.getItem('token')
+    if (!token) return
+
+    try {
+      if (editingCategoryId) {
+        await apiUpdateCategory(token, editingCategoryId, {
+          name: categoryForm.name,
+          icon_type: categoryForm.icon,
+          color: categoryForm.color,
+        })
+      } else {
+        await createCategory(token, {
+          name: categoryForm.name,
+          icon_type: categoryForm.icon,
+          color: categoryForm.color,
+          type: categoryType.toUpperCase(),
+        })
+      }
+      fetchCategories(token)
+      setEditingCategoryId(null)
+      setCategoryForm({ name: '', icon: 'Utensils', color: '#5B9BD5' })
+      setShowAddCategory(false)
+    } catch (error) {
+      console.error('Failed to save category:', error)
+      alert('儲存類別失敗')
+    }
   }
 
-  const handleSubmitCategory = () => {
-    if (!categoryForm.name) return
+  const handleDeleteCategory = async (id: string) => {
+    const token = localStorage.getItem('token')
+    if (!token) return
+    if (!confirm('確定要刪除此類別嗎？')) return
 
-    if (editingCategoryId) {
-      updateCategory(editingCategoryId, {
-        name: categoryForm.name,
-        icon: categoryForm.icon,
-        color: categoryForm.color,
-      })
-      setEditingCategoryId(null)
-    } else {
-      addCategory({
-        name: categoryForm.name,
-        icon: categoryForm.icon,
-        color: categoryForm.color,
-        type: categoryType,
-      })
+    try {
+      await apiDeleteCategory(token, id)
+      fetchCategories(token)
+    } catch (error) {
+      console.error('Failed to delete category:', error)
+      alert('刪除類別失敗')
     }
-
-    setCategoryForm({ name: '', icon: 'Utensils', color: '#5B9BD5' })
-    setShowAddCategory(false)
   }
 
   const handleEditCategory = (category: typeof categories[0]) => {
@@ -345,7 +362,7 @@ export default function SettingsPage() {
                           variant="ghost"
                           size="icon"
                           className="h-6 w-6"
-                          onClick={() => deleteCategory(category.id)}
+                          onClick={() => handleDeleteCategory(category.id)}
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>
@@ -389,7 +406,7 @@ export default function SettingsPage() {
                           variant="ghost"
                           size="icon"
                           className="h-6 w-6"
-                          onClick={() => deleteCategory(category.id)}
+                          onClick={() => handleDeleteCategory(category.id)}
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>

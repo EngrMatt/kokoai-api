@@ -11,6 +11,9 @@ if config.config_file_name is not None:
 
 # 匯入 Base
 from app.db.base import Base
+# 匯入所有 Model 以確保 Alembic 能偵測到 (避免循環引用，統一從 models 包匯入)
+import app.models 
+
 target_metadata = Base.metadata
 
 # 匯入你的設定

@@ -11,6 +11,7 @@ class Category(Base):
     name = Column(String, nullable=False)
     type = Column(String, nullable=False)  # INCOME or EXPENSE
     icon_type = Column(String, nullable=True)
+    color = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
     
     # Self-referencing relationship for parent-child (Sub-categories)
@@ -20,4 +21,4 @@ class Category(Base):
     # Relationships
     user = relationship("User")
     parent = relationship("Category", remote_side=[id], backref="children")
-    transactions = relationship("Transaction", back_populates="category")
+    transactions = relationship("TransactionRecord", back_populates="category")

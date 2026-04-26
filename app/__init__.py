@@ -3,7 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import (
     user_router, 
-    auth_router
+    auth_router,
+    category_router
     )
 
 def create_app() -> FastAPI:
@@ -22,8 +23,7 @@ def create_app() -> FastAPI:
     routers = [
         user_router.router,
         auth_router.router,
-        # product_router.router,
-        # order_router.router,
+        category_router.router,
         # 未來新增 router 直接加到這裡
     ]
 

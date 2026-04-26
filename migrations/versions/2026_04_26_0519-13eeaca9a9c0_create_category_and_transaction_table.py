@@ -26,6 +26,7 @@ def upgrade() -> None:
         sa.Column('name', sa.String(), nullable=False),
         sa.Column('type', sa.String(), nullable=False),
         sa.Column('icon_type', sa.String(), nullable=True),
+        sa.Column('color', sa.String(), nullable=True),
         sa.Column('is_active', sa.Boolean(), nullable=True, server_default='true'),
         sa.Column('parent_id', sa.UUID(), nullable=True),
         sa.Column('user_id', sa.UUID(), nullable=False),

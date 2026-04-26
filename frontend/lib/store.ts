@@ -32,6 +32,7 @@ interface FinanceStore {
   deleteTransaction: (id: string) => void
 
   // Category actions
+  fetchCategories: (token: string) => Promise<void>
   addCategory: (category: Omit<Category, 'id'>) => void
   updateCategory: (id: string, category: Partial<Category>) => void
   deleteCategory: (id: string) => void
@@ -115,6 +116,21 @@ export const useFinanceStore = create<FinanceStore>()(
       },
 
       // Category actions
+      fetchCategories: async (token) => {
+        try {
+          const { getCategories } = await import('./api/categories')
+          const data = await getCategories(token)
+          // Map API fields to frontend types
+          const mappedData = data.map((cat: any) => ({
+            ...cat,
+            icon: cat.icon_type, // Map icon_type to icon
+          }))
+          set({ categories: mappedData })
+        } catch (error) {
+          console.error('Failed to fetch categories:', error)
+        }
+      },
+
       addCategory: (category) => {
         const newCategory = { ...category, id: generateId() }
         set((state) => ({

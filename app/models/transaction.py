@@ -5,8 +5,8 @@ from sqlalchemy.sql import func
 import uuid
 from app.db.base import Base
 
-class Transaction(Base):
-    __tablename__ = "transactions"
+class TransactionRecord(Base):
+    __tablename__ = "transaction_records"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)

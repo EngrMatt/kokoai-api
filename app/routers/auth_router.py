@@ -7,6 +7,8 @@ from app.db import get_db
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+from app.services.category_service import init_user_categories
+
 @router.post("/register", response_model=UserResponse)
 def register(user: UserCreate, db: Session = Depends(get_db)):
     existing = db.query(User).filter(User.email == user.email, User.is_active == True).first()
@@ -26,6 +28,9 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
+
+    # Initialize default categories for the new user
+    init_user_categories(db, new_user.id)
 
     return new_user
 
