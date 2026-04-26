@@ -58,10 +58,18 @@ export default function LoginPage() {
     } else {
       setPasswordStatus('invalid')
     }
+    // 連動檢查確認密碼
+    if (confirmPassword.length > 0) {
+      if (val === confirmPassword) {
+        setConfirmStatus('valid')
+      } else {
+        setConfirmStatus('invalid')
+      }
+    }
   }
 
-  const validateConfirmPassword = (val: string) => {
-    if (val === password && val.length > 0) {
+  const validateConfirmPassword = (val: string, currentPassword = password) => {
+    if (val === currentPassword && val.length > 0) {
       setConfirmStatus('valid')
     } else {
       setConfirmStatus('invalid')
@@ -320,10 +328,7 @@ export default function LoginPage() {
               {/* Submit Button */}
               <Button
                 type="submit"
-                className={`w-full h-11 text-sm font-semibold mt-2 shadow-lg transition-all duration-300 
-                  ${!isLogin
-                    ? (isFormValid ? 'bg-accent hover:bg-accent/90 shadow-accent/20' : 'bg-muted text-muted-foreground cursor-not-allowed')
-                    : 'bg-primary hover:bg-primary/90 shadow-primary/20'}`}
+                className="w-full h-11 text-sm font-semibold mt-2 shadow-lg shadow-primary/20 transition-all duration-300"
                 disabled={isLoading || (!isLogin && !isFormValid)}
               >
                 {isLoading ? (
