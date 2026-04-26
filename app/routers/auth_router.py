@@ -9,6 +9,11 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 from app.services.category_service import init_user_categories
 
+@router.get("/check-email")
+def check_email(email: str, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == email, User.is_active == True).first()
+    return {"available": user is None}
+
 @router.post("/register", response_model=UserResponse)
 def register(user: UserCreate, db: Session = Depends(get_db)):
     existing = db.query(User).filter(User.email == user.email, User.is_active == True).first()
