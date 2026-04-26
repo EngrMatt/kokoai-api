@@ -20,7 +20,13 @@ class UserService:
         hashed_pw = hash_password(user_in.password)
         
         # 3. 傳給 Repository 執行寫入
-        return self.user_repo.create(db, user_in=user_in, hashed_password=hashed_pw)
+        new_user = self.user_repo.create(db, user_in=user_in, hashed_password=hashed_pw)
+
+        # 4. 初始化預設類別
+        from app.services.category_service import init_user_categories
+        init_user_categories(db, new_user.id)
+
+        return new_user
 
     def get_user(self, db: Session, user_id: uuid.UUID):
         return self.user_repo.get_by_id(db, user_id)
