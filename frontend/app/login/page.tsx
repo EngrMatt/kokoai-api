@@ -102,6 +102,16 @@ export default function LoginPage() {
     router.push('/')
   }
 
+  const toggleMode = () => {
+    setIsLogin(!isLogin)
+    setEmailStatus('idle')
+    setPasswordStatus('idle')
+    setNameStatus('idle')
+    setConfirmStatus('idle')
+    setPassword('')
+    setConfirmPassword('')
+  }
+
   return (
     <div className="h-screen flex overflow-hidden">
       {/* Left Side - Branding */}
@@ -205,10 +215,14 @@ export default function LoginPage() {
               <div className="space-y-1">
                 <div className="flex justify-between items-center ml-1">
                   <label className="text-xs font-medium text-foreground">電子郵件</label>
-                  {emailStatus === 'valid' && <Check className="w-3.5 h-3.5 text-green-500" />}
-                  {emailStatus === 'taken' && <span className="text-[10px] text-red-500">此信箱已在使用</span>}
-                  {emailStatus === 'invalid' && <span className="text-[10px] text-red-500">格式不正確</span>}
-                  {emailStatus === 'checking' && <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />}
+                  {!isLogin && (
+                    <>
+                      {emailStatus === 'valid' && <Check className="w-3.5 h-3.5 text-green-500" />}
+                      {emailStatus === 'taken' && <span className="text-[10px] text-red-500">此信箱已在使用</span>}
+                      {emailStatus === 'invalid' && <span className="text-[10px] text-red-500">格式不正確</span>}
+                      {emailStatus === 'checking' && <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />}
+                    </>
+                  )}
                 </div>
                 <Input
                   type="email"
@@ -355,7 +369,7 @@ export default function LoginPage() {
               {isLogin ? '還沒有帳號嗎？' : '已經有帳號了？'}
               <button
                 type="button"
-                onClick={() => setIsLogin(!isLogin)}
+                onClick={toggleMode}
                 className="ml-2 text-primary font-bold hover:underline transition-all"
               >
                 {isLogin ? '立即註冊' : '返回登入'}
